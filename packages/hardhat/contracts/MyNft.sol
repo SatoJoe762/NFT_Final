@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract MyNFT is ERC721, ERC721URIStorage, Ownable {
 	uint256 private _nextTokenId;
 
-	constructor() ERC721("MyToken", "MTK") Ownable() {}
+	constructor() ERC721("Selena", "SLN") Ownable() {}
 
 	function safeMint(address to, string memory uri) public onlyOwner {
 		uint256 tokenId = _nextTokenId++;
@@ -36,4 +36,11 @@ contract MyNFT is ERC721, ERC721URIStorage, Ownable {
 	) internal override(ERC721, ERC721URIStorage) {
 		super._burn(tokenId);
 	}
+	function buyNFT(uint256 tokenId) public payable {
+        require(msg.value >= 0.1 ether, "Insufficient payment");
+        address owner = ownerOf(tokenId);
+        require(owner != msg.sender, "Cannot buy your own NFT");
+        
+        _transfer(owner, msg.sender, tokenId);
+    }
 }
